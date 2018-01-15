@@ -1,0 +1,4 @@
+[submodule "3scale-amp-openshift-templates"]
+	path = 3scale-amp-openshift-templates
+	url = git@github.com:nmasse-itix/3scale-amp-openshift-templates.git
+	branch = master
