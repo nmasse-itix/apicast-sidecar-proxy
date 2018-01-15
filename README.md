@@ -113,6 +113,7 @@ GOOS=linux GOARCH=amd64 go build -o apicast-sidecar-proxy src/itix.fr/forward/ma
 export VERSION=1.0
 export DOCKER_USERNAME="nmasse"
 git tag -a v$VERSION -m "Version $VERSION"
+git push origin "v$VERSION"
 docker build -t $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION .
 ```
 
