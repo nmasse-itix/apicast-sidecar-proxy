@@ -50,6 +50,18 @@ If needed, you can stop the proxy with:
 pkill apicast-sidecar-proxy
 ```
 
+Once the proxy is running, [check that it works](#check-that-it-works) and configure Apicast.
+
+Run your apicast with specially crafted `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables:
+
+```sh
+docker run -d -p 8080:8080 --name apicast -e THREESCALE_PORTAL_ENDPOINT=http://<ACCESS_TOKEN>@172.17.0.1:9090 -e BACKEND_ENDPOINT_OVERRIDE=http://172.17.0.1:9091 -e THREESCALE_DEPLOYMENT_ENV=staging 3scale-amp21/apicast-gateway
+```
+
+Note: 
+ - the 172.17.0.1 is the IP address of your Docker host (the IP address of the `docker0` interface). You might have to change the IP address in the command line above to match your environment. 
+ - the `<ACCESS_TOKEN>` is your 3scale access token as explained [here](https://access.redhat.com/documentation/en-us/red_hat_3scale/2.saas/html/deployment_options/apicast-docker#step_2_run_the_docker_gateway).
+
 ### Docker
 
 You can start the proxy using docker: 
@@ -74,13 +86,30 @@ docker stop apicast-sidecar-proxy
 docker rm apicast-sidecar-proxy
 ```
 
+Once the proxy is running, [check that it works](#check-that-it-works) and configure Apicast. 
+
+Run your apicast with specially crafted `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables:
+
+```sh
+docker inspect -f '{{.NetworkSettings.IPAddress}}' apicast-sidecar-proxy
+PROXY_IP=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' apicast-sidecar-proxy)
+docker run -d -p 8080:8080 --name apicast -e THREESCALE_PORTAL_ENDPOINT=http://<ACCESS_TOKEN>@$PROXY_IP:9090 -e BACKEND_ENDPOINT_OVERRIDE=http://$PROXY_IP:9091 -e THREESCALE_DEPLOYMENT_ENV=staging 3scale-amp21/apicast-gateway
+```
+
+Note: 
+ - you cannot use the `--link` switch of the `docker run` command since it uses entries in `/etc/hosts` that are not read by apicast 
+ - the `<ACCESS_TOKEN>` is your 3scale access token as explained [here](https://access.redhat.com/documentation/en-us/red_hat_3scale/2.saas/html/deployment_options/apicast-docker#step_2_run_the_docker_gateway).
+
+
 ### OpenShift
+
+The rest of this guide expects that your OpenShift environment is configured to work with proxies ([as explained here](https://docs.openshift.com/container-platform/latest/install_config/http_proxies.html)). 
 
 TODO
 
 ## Check that it works
 
-Check that the communication is working with the following commands:
+There are some very rough surface checks that ensure the communication is working:
 ```
 $ curl -D - http://localhost:9090/admin/api/accounts.xml 
 HTTP/1.1 403 Forbidden
@@ -96,6 +125,7 @@ Content-Type: application/vnd.3scale-v2.0+xml
 
 <?xml version="1.0" encoding="UTF-8"?><error code="provider_key_or_service_token_required">Provider key or service token are required</error>
 ```
+In both cases, check that the return code is 403 and the response is in XML format. 
 
 ## Development
 
