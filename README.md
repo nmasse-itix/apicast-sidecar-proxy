@@ -9,8 +9,8 @@ cloud). The gateway, however, is deployed on-premise in the customer network.
 More and more customers enforce the use of an HTTP proxy for outgoing connections.
 Sometimes, an authentication is required to connect to the proxy.
 
-Currently, apicast does not fully support HTTP proxies. Hence this project provides
-a sidecar container for Apicast that enables HTTP proxies support.
+Currently, [apicast does not fully support HTTP proxies](https://issues.jboss.org/browse/THREESCALE-221).
+Hence this project provides a sidecar container for Apicast that enables HTTP proxies support.
 
 ## Deployment
 
