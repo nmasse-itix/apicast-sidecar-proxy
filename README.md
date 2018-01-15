@@ -111,15 +111,25 @@ GOOS=linux GOARCH=amd64 go build -o apicast-sidecar-proxy src/itix.fr/forward/ma
 
 ```sh
 VERSION=1.0
+DOCKER_USERNAME="nmasse"
 git tag -a v$VERSION -m "Version $VERSION"
-docker build -t apicast-sidecar-proxy:$VERSION .
+docker build -t $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION .
 ```
 
 ### Pushing your image to DockerHub (Optional)
 
+To push the a new version to Dockerhub:
 ```sh
-docker login https://index.docker.io/v1/
-docker images apicast-sidecar-proxy:$VERSION --format '{{ .ID }}'
-docker tag $(docker images apicast-sidecar-proxy:$VERSION --format '{{ .ID }}') index.docker.io/<your-username>/apicast-sidecar-proxy:$VERSION
-docker push index.docker.io/<your-username>/apicast-sidecar-proxy:$VERSION
+docker login -u "$DOCKER_USERNAME" https://index.docker.io/v1/
+docker images $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION --format '{{ .ID }}'
+docker tag $(docker images $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION --format '{{ .ID }}') index.docker.io/$DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION
+docker push index.docker.io/$DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION
 ```
+
+And to make it available by default (`latest` tag).
+```sh
+docker images $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION --format '{{ .ID }}'
+docker tag $(docker images $DOCKER_USERNAME/apicast-sidecar-proxy:$VERSION --format '{{ .ID }}') index.docker.io/$DOCKER_USERNAME/apicast-sidecar-proxy:latest
+docker push index.docker.io/$DOCKER_USERNAME/apicast-sidecar-proxy:latest
+```
+
