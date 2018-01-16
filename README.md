@@ -1,4 +1,4 @@
-# A sidecar for Apicast, enabling proxy support
+# A sidecar container for Apicast, enabling proxy support
 
 ## Why this project ?
 
@@ -11,6 +11,45 @@ Sometimes, an authentication is required to connect to the proxy.
 
 Currently, [apicast does not fully support HTTP proxies](https://issues.jboss.org/browse/THREESCALE-221).
 Hence this project provides a sidecar container for Apicast that enables HTTP proxies support.
+
+This project implements:
+ - HTTP(S) Proxy support
+ - Configurable SSL/TLS truststore
+ - HTTP Basic Proxy authentication
+
+## How it works
+
+This project is written in golang and uses the built-in proxy support of golang ([net/http](https://golang.org/pkg/net/http/#ProxyFromEnvironment)) 
+to forward requests to the proxy. 
+
+Two HTTP ports are opened (9090 and 9091 by default), where the sidecar container listens for HTTP requests. 
+Requests that go through port 9090 are forwarded to the 3scale admin portal over the proxy whereas requests that go 
+through port 9091 are forwarded to the 3scale authorization backend (su1.3scale.net). 
+
+The admin portal and authorization backend URLs are set using the `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables. 
+
+Then, Apicast needs to be configured to talk to its sidecar container using `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables. 
+
+So, if you deployed your Apicast using the following environment variables:
+```sh
+THREESCALE_PORTAL_ENDPOINT=https://secret@acme-admin.3scale.net
+BACKEND_ENDPOINT_OVERRIDE=https://su1.3scale.net
+```
+
+Then, you would deploy the sidecar container with:
+```sh
+THREESCALE_PORTAL_ENDPOINT=https://acme-admin.3scale.net
+BACKEND_ENDPOINT_OVERRIDE=https://su1.3scale.net
+```
+
+And, you would update your Apicast configuration with the following environment variables:
+```sh
+THREESCALE_PORTAL_ENDPOINT=http://secret@proxy:9090
+BACKEND_ENDPOINT_OVERRIDE=http://proxy:9091
+```
+
+The proxy DNS name (`proxy`) depends on your installation method (classic, Docker, OpenShift). 
+Read the following section for more details.
 
 ## Deployment
 
