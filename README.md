@@ -181,7 +181,7 @@ See :
 
 On OpenShift, you would use a configmap + a volume mount to do so. 
 On Docker, you can either build a custom docker image or use a volume mount. 
-On a classic install, just put the CA certificate in one of tin one of the standard locations. 
+On a classic install, just put the CA certificate in one of the one of the standard locations. 
 
 ## Development
 
