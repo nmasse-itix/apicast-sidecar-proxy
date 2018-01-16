@@ -169,7 +169,7 @@ In both cases, check that the return code is 403 and the response is in XML form
 ## Working with proxies that do SSL/TLS interception (MITM)
 
 Sometimes, you might have to go through a proxy that does SSL/TLS interception (aka "Man-in-the-Middle"). 
-In this case, when an SSL/TLS connection is made through the proxy, it hijack the connection to present
+In this case, when an SSL/TLS connection is made through the proxy, it hijacks the connection to present
 a custom certificate, and then decrypt and re-encrypt the SSL/TLS flow. 
 
 This kind of proxy can work with this project. You just have to get the proxy CA certificate and put it 
