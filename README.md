@@ -144,7 +144,10 @@ Note:
 
 The rest of this guide expects that your OpenShift environment is configured to work with proxies ([as explained here](https://docs.openshift.com/container-platform/latest/install_config/http_proxies.html)). 
 
-TODO
+To instanciate Apicast with his sidecar container, just use the [modified template](https://github.com/nmasse-itix/3scale-amp-openshift-templates/blob/master/apicast-gateway/apicast.yml):
+```sh
+oc process -f https://raw.githubusercontent.com/nmasse-itix/3scale-amp-openshift-templates/master/apicast-gateway/apicast.yml -p ACCESS_TOKEN=<ACCESS_TOKEN> -p THREESCALE_PORTAL_ENDPOINT=https://<TENANT>-admin.3scale.net -p BACKEND_ENDPOINT_OVERRIDE=https://su1.3scale.net | oc create -f - 
+```
 
 ## Check that it works
 
