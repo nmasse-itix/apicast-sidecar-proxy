@@ -166,6 +166,23 @@ Content-Type: application/vnd.3scale-v2.0+xml
 ```
 In both cases, check that the return code is 403 and the response is in XML format. 
 
+## Working with proxies that do SSL/TLS interception (MITM)
+
+Sometimes, you might have to go through a proxy that does SSL/TLS interception (aka "Man-in-the-Middle"). 
+In this case, when an SSL/TLS connection is made through the proxy, it hijack the connection to present
+a custom certificate, and then decrypt and re-encrypt the SSL/TLS flow. 
+
+This kind of proxy can work with this project. You just have to get the proxy CA certificate and put it 
+with the system CA certificates (truststore) in one of the standard locations. 
+
+See :
+ - https://golang.org/src/crypto/x509/root_unix.go
+ - https://golang.org/src/crypto/x509/root_linux.go
+
+On OpenShift, you would use a configmap + a volume mount to do so. 
+On Docker, you can either build a custom docker image or use a volume mount. 
+On a classic install, just put the CA certificate in one of tin one of the standard locations. 
+
 ## Development
 
 ### Build
