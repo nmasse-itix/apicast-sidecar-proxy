@@ -24,11 +24,11 @@ to forward requests to the proxy.
 
 Two HTTP ports are opened (9090 and 9091 by default), where the sidecar container listens for HTTP requests. 
 Requests that go through port 9090 are forwarded to the 3scale admin portal over the proxy whereas requests that go 
-through port 9091 are forwarded to the 3scale authorization backend (su1.3scale.net). 
+through port 9091 are forwarded to the 3scale authorization backend (su1.3scale.net), over the proxy. 
 
 The admin portal and authorization backend URLs are set using the `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables. 
 
-Then, Apicast needs to be configured to talk to its sidecar container using `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables. 
+Then, Apicast needs to be configured to talk to its sidecar container also using the `THREESCALE_PORTAL_ENDPOINT` and `BACKEND_ENDPOINT_OVERRIDE` environment variables. 
 
 So, if you deployed your Apicast using the following environment variables:
 ```sh
